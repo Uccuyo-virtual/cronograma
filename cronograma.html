@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma - Diseño de Proyectos Formativos</title>
+    <style>
+        .cronograma-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .cronograma-header {
+            background: #E38A00;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .cronograma-header h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.8em;
+        }
+        
+        .cronograma-subtitle {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1em;
+        }
+        
+        .sesiones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .sesion-card {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .sesion-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #E38A00;
+        }
+        
+        .sesion-header {
+            padding: 15px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .sesion-1 .sesion-header { background: #064A31; }
+        .sesion-2 .sesion-header { background: #E38A00; }
+        .sesion-3 .sesion-header { background: #064A31; }
+        
+        .sesion-numero {
+            width: 25px;
+            height: 25px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 0.9em;
+        }
+        
+        .sesion-content {
+            padding: 15px;
+        }
+        
+        .sesion-tema {
+            background: #E38A00;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .objetivos-titulo {
+            color: #064A31;
+            margin: 12px 0 8px 0;
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        .objetivos-lista {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 12px 0;
+        }
+        
+        .objetivos-lista li {
+            padding: 6px 0 6px 20px;
+            position: relative;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 1px 0;
+            font-size: 0.9em;
+        }
+        
+        .objetivos-lista li:hover {
+            transform: scale(1.03) translateX(8px);
+            background: rgba(227, 138, 0, 0.1);
+            border-color: #E38A00;
+            padding: 8px 6px 8px 20px;
+            box-shadow: 0 2px 6px rgba(227, 138, 0, 0.2);
+        }
+        
+        .objetivos-lista li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #064A31;
+            font-weight: bold;
+        }
+        
+        .sesion-info {
+            background: rgba(227, 138, 0, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #E38A00;
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
+        
+        .fecha-hora {
+            font-weight: bold;
+            color: #064A31;
+            margin-bottom: 3px;
+        }
+        
+        .modalidad {
+            color: #666;
+        }
+        
+        .encuentros-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .encuentros-sincronicos, .consultas-sincronicas {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            color: white;
+        }
+        
+        .encuentros-sincronicos {
+            background: #064A31;
+        }
+        
+        .consultas-sincronicas {
+            background: #E38A00;
+        }
+        
+        .section-titulo {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        
+        .encuentro-item, .consulta-item {
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        .encuentro-item:last-child, .consulta-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .tag-comunidad {
+            background: #E38A00;
+            color: white;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 0.75em;
+        }
+        
+        @media (max-width: 768px) {
+            .sesiones-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .encuentros-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .cronograma-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cronograma-container">
+        <div class="cronograma-header">
+            <h2>📅 Cronograma Interactivo</h2>
+            <p class="cronograma-subtitle">Módulo 2 - Diseño de Proyectos Formativos</p>
+        </div>
+        
+        <div class="sesiones-grid">
+            <div class="sesion-card sesion-1">
+                <div class="sesion-header">
+                    <div class="sesion-numero">1</div>
+                    <div>Sesión 1</div>
+                    <div style="font-size: 0.85em; opacity: 0.9;">3 a 16 de junio</div>
+                </div>
+                <div class="sesion-content">
+                    <div class="sesion-tema">🔍 Polífonico de saberes y experiencias</div>
+                    <div class="objetivos-titulo">📋 Objetivos a lograr:</div>
+                    <ul class="objetivos-lista">
+                        <li>Crear vínculo en Instagram para la Especialización</li>
+                        <li>Seguir con <span class="tag-comunidad">@comunidadvirtual</span></li>
+                        <li>Postear etiquetando <span class="tag-comunidad">@comunidadvirtual</span> con #hashtag</li>
+                        <li>Participar comentando publicaciones o interactuando</li>
+                        <li>Explorar plantilla "PDD": cronograma, programa, materiales</li>
+                    </ul>
+                    <div class="sesion-info">
+                        <div class="fecha-hora">Encuentro Sincrónico</div>
+                        <div class="fecha-hora">Viernes 13 de junio - 16:00hs</div>
+                        <div class="modalidad">No obligatorio - Sin graba</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sesion-card sesion-2">
+                <div class="sesion-header">
+                    <div class="sesion-numero">2</div>
+                    <div>Sesión 2</div>
+                    <div style="font-size: 0.85em; opacity: 0.9;">16 a 30 de junio</div>
+                </div>
+                <div class="sesion-content">
+                    <div class="sesion-tema">🎯 Primeras Pistas en el Diseño</div>
+                    <div class="objetivos-titulo">📋 Objetivos a lograr:</div>
+                    <ul class="objetivos-lista">
+                        <li>Postear en Instagram etiquetando <span class="tag-comunidad">@comunidadvirtual</span></li>
+                        <li>Explorar plantilla Sesión 2 y sus materiales</li>
+                        <li>Participar en foro compartiendo una "buena idea"</li>
+                        <li>Leer texto propio de la Sesión</li>
+                        <li>Crear presentación visual (Canva/Prezi)</li>
+                        <li>Iniciar hoja de reflexión del proceso de diseño</li>
+                    </ul>
+                    <div class="sesion-info">
+                        <div class="fecha-hora">Duración: 16 jun (15:00hrs) - 30 jun</div>
+                        <div class="modalidad">Jueves 17 de junio - 16:00hs</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sesion-card sesion-3">
+                <div class="sesion-header">
+                    <div class="sesion-numero">3</div>
+                    <div>Sesión 3</div>
+                    <div style="font-size: 0.85em; opacity: 0.9;">1 a 13 de julio</div>
+                </div>
+                <div class="sesion-content">
+                    <div class="sesion-tema">🏗️ Enriqueciendo y Ensamblando</div>
+                    <div class="objetivos-titulo">📋 Objetivos a lograr:</div>
+                    <ul class="objetivos-lista">
+                        <li>Postear en Instagram etiquetando <span class="tag-comunidad">@comunidadvirtual</span></li>
+                        <li>Explorar plantilla Sesión 3 y materiales</li>
+                        <li>Leer materiales sugeridos de la sesión</li>
+                        <li>Digitalizar entorno virtual con tecnologías emergentes</li>
+                        <li>Presentar trabajo final: Aula Virtual/Comunidad</li>
+                    </ul>
+                    <div class="sesion-info">
+                        <div class="fecha-hora">Duración: 1 al 13 de julio</div>
+                        <div class="modalidad">Encuentro de Cierre - Lunes 7 de julio - 16:00hs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="encuentros-section">
+            <div class="encuentros-sincronicos">
+                <div class="section-titulo">🎥 Encuentros Sincrónicos</div>
+                <div style="text-align: center; margin-bottom: 12px; opacity: 0.9; font-size: 0.9em;">No obligatorios - Se graban en el aula</div>
+                
+                <div class="encuentro-item">
+                    <div><strong>📅 Síncrónicos</strong></div>
+                    <div>Viernes 13 junio - 16:00hs</div>
+                </div>
+                
+                <div class="encuentro-item">
+                    <div><strong>📅 Síncrónicos</strong></div>
+                    <div>Jueves 17 junio - 18:00hs</div>
+                </div>
+                
+                <div class="encuentro-item">
+                    <div><strong>📅 Síncrónicos - Cierre</strong></div>
+                    <div>Lunes 7 julio - 18:00hs</div>
+                </div>
+            </div>
+            
+            <div class="consultas-sincronicas">
+                <div class="section-titulo">💬 Consultas</div>
+                
+                <div class="consulta-item">
+                    <div><strong>GenAIly/Canva</strong></div>
+                    <div>Mie 24/06 - 16:00</div>
+                </div>
+                
+                <div class="consulta-item">
+                    <div><strong>Aula MOODLE</strong></div>
+                    <div>Lun 1/07 - 15:30</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
